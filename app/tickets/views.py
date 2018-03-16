@@ -7,8 +7,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-# from rest_framework.permissions import IsAuthenticated
-# from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import State
@@ -17,6 +16,7 @@ from .serializers import StateSerializer
 from .serializers import TicketSerializer
 from .serializers import UserSerializer
 from .filters import TicketFilter
+from .permissions import IsStaffOrReadOnly
 
 
 class StateList(generics.ListCreateAPIView):
@@ -28,6 +28,7 @@ class StateList(generics.ListCreateAPIView):
     """
 
     queryset = State.objects.all()
+    permission_classes = (IsAuthenticated, IsStaffOrReadOnly)
     serializer_class = StateSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('name',)
@@ -45,6 +46,7 @@ class StateDetail(generics.RetrieveUpdateDestroyAPIView):
     """
 
     queryset = State.objects.all()
+    permission_classes = (IsAuthenticated, IsStaffOrReadOnly)
     serializer_class = StateSerializer
 
 
@@ -57,6 +59,7 @@ class TicketList(generics.ListCreateAPIView):
     """
 
     queryset = Ticket.objects.all()
+    permission_classes = (IsAuthenticated, IsStaffOrReadOnly)
     serializer_class = TicketSerializer
     filter_class = TicketFilter
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
@@ -73,6 +76,7 @@ class TicketDetail(generics.RetrieveUpdateAPIView):
     """
 
     queryset = Ticket.objects.all()
+    permission_classes = (IsAuthenticated, IsStaffOrReadOnly)
     serializer_class = TicketSerializer
 
 

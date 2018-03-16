@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from django.contrib.admin import DateFieldListFilter
+from django.contrib.admin import FieldListFilter
 
 from .models import State
 from .models import Ticket
@@ -14,7 +16,11 @@ class StateAdmin(admin.ModelAdmin):
 class TicketAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'created_at', 'state']
     list_editable = ['state']
-    list_filter = ['state']
+    list_filter = (
+        ('created_at', DateFieldListFilter),
+        ('state'),
+    )
+
     fields = ['title', 'description', 'state', 'created_at']
     readonly_fields = ['created_at']
     search_fields = ['title', 'description']
